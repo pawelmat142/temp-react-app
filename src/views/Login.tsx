@@ -4,6 +4,8 @@ import { Path } from '../utils/path';
 import { Util } from '../utils/util';
 import fs from '../services/firebase';
 import { Link, useNavigate } from 'react-router-dom';
+import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
+import PrimaryBtn from '../components/buttons/PrimaryBtn';
 
 
 const Login: React.FC = () => {
@@ -34,7 +36,7 @@ const Login: React.FC = () => {
                     src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
                     className="mx-auto h-10 w-auto"
                 />
-                <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+                <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight primary-text">
                     Sign in to your account
                 </h2>
                 </div>
@@ -42,7 +44,7 @@ const Login: React.FC = () => {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form onSubmit={handleLogin} className="space-y-6">
                     <div>
-                    <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
+                    <label htmlFor="email" className="block text-sm/6 font-medium primary-text">
                         Email address
                     </label>
                     <div className="mt-2">
@@ -53,7 +55,7 @@ const Login: React.FC = () => {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
                         required
                         autoComplete="email"
                     />
@@ -62,7 +64,7 @@ const Login: React.FC = () => {
 
                     <div>
                     <div className="flex items-center justify-between">
-                        <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
+                        <label htmlFor="password" className="block text-sm/6 font-medium primary-text">
                         Password
                         </label>
                     </div>
@@ -73,27 +75,17 @@ const Login: React.FC = () => {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                            className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
                             required
                             autoComplete="current-password"
                         />
                     </div>
                     </div>
 
-                    <div>
-                    <button
-                        type="submit"
-                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                        Sign in
-                    </button>
+                    <div className='mt-5'>
+                        <PrimaryBtn type="submit" className='mt-5'>Sign in</PrimaryBtn>
 
-                    <Link
-                        to={Path.REGISTER}
-                        className="mt-5 flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-1.5 text-sm/6 font-semibold text-indigo-600 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                        Don't have an account? Register
-                    </Link>
+                        <PrimaryTextBtn to={Path.REGISTER} className='mt-5'>Don't have an account? Register</PrimaryTextBtn>
                     </div>
                 </form>
 

@@ -1,0 +1,59 @@
+@import 'color.scss';
+@import 'variables.scss';
+
+.primary-color-control {
+  transition: $transition-standard;
+  outline-offset: -1px;
+  outline-width: 1px;
+  outline-style: solid;
+  outline-color: $gray-300;
+  &::placeholder {
+    color: $gray-400;
+  }
+  &:focus {
+    outline-width: 2px;
+    outline-offset: -2px;
+    outline-color: $primary-color;
+  }
+}
+
+.primary-transparent-control {
+  background-color: transparent;
+  transition: $transition-standard;
+  &:hover {
+    background-color: $gray-200;
+  }
+}
+
+.btn-primary {
+    color: #fff;
+    transition: $transition-standard;
+    @extend .bg-primary-color;
+    &:hover {
+        background-color: $primary-color-dark;
+    }
+}
+
+.dark {
+    .primary-color-control {
+        outline-color: $gray-500;
+
+        &:focus {
+            outline-width: 2px;
+            outline-offset: -2px;
+            outline-color: $primary-color-dark;
+        }
+    }
+
+    .primary-transparent-control {
+        &:hover {
+            background-color: $gray-700;
+        }
+    }
+
+    .btn-primary {
+        &:hover {
+            background-color: $primary-color;
+        }
+    }
+}

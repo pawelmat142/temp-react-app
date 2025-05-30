@@ -7,7 +7,7 @@ export default function PgeOne() {
       >
       <div className="mx-auto max-w-2xl w-full flex flex-col justify-center items-center">
         <div className="text-center">
-          <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
+          <h1 className="text-5xl font-semibold tracking-tight text-balance primary-text sm:text-7xl">
             Strona 2
           </h1>
         </div>

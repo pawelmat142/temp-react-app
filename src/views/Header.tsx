@@ -18,6 +18,7 @@ import { toast } from 'react-toastify';
 import { Util } from '../utils/util';
 import { Path } from '../utils/path';
 import { FsUtil } from '../utils/firebase.util';
+import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 
 export default () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
@@ -69,7 +70,7 @@ export default () => {
     };
 
     return (
-        <header className="bg-white">
+        <header className="primary-bg">
             <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
                 <div className="flex lg:flex-1">
                     <Link to={Path.HOME} className="-m-1.5 p-1.5">
@@ -84,7 +85,7 @@ export default () => {
                     <button
                         type="button"
                         onClick={() => setMobileMenuOpen(true)}
-                        className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                        className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 primary-text"
                     >
                         <span className="sr-only">Open main menu</span>
                         <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
@@ -93,13 +94,20 @@ export default () => {
                     </button>
                 </div>
                 <div className="hidden lg:flex lg:gap-x-12">
-                    <Link to={Path.PAGE_ONE} className="text-sm/6 font-semibold text-gray-900">Strona 1</Link>
-                    <Link to={Path.PAGE_TWO} className="text-sm/6 font-semibold text-gray-900">Strona 2</Link>
+                    <Link to={Path.PAGE_ONE} className="text-sm/6 font-semibold primary-text">Strona 1</Link>
+                    <Link to={Path.PAGE_TWO} className="text-sm/6 font-semibold primary-text">Strona 2</Link>
+                    <a
+                            onClick={() => {
+                                toggleDarkMode()
+                                setMobileMenuOpen(false)
+                            }}
+                            className="text-sm/6 font-semibold primary-text cursor-pointer"
+                    >{ darkMode ? 'Light mode' : 'Dark mode'}</a>
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     {userName ? (
                         <div className="flex items-center gap-4">
-                            <span className="text-sm/6 font-semibold text-gray-900">
+                            <span className="text-sm/6 font-semibold primary-text">
                                 {userName}
                             </span>
                             <button
@@ -113,16 +121,12 @@ export default () => {
                             </button>
                         </div>
                     ) : showSignIn ?  (
-                        <Link to={Path.LOGIN} className="text-sm/6 font-semibold text-gray-900">
+                        <PrimaryTextBtn to={Path.LOGIN} fullWidth={false}>
                             Sign in <span aria-hidden="true">&rarr;</span>
-                        </Link>
+                        </PrimaryTextBtn>
                     ) : ''}
                 </div>
             </nav>
-
-
-
-
 
             <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="relative lg:hidden">
                 <TransitionChild
@@ -152,7 +156,7 @@ export default () => {
                                     transition
                                     className="pointer-events-auto relative w-screen max-w-md transform transition duration-300 ease-in-out data-closed:translate-x-full sm:duration-300"
                                 >
-                                    <div className="flex h-full flex-col bg-white shadow-xl">
+                                    <div className="flex h-full flex-col primary-bg shadow-xl">
                                         <div className="relative mt-6 flex-1 px-4 sm:px-6">
                                             <div className="flex items-center justify-between">
                                                 <Link to={Path.HOME} className="-m-1.5 p-1.5">
@@ -166,7 +170,7 @@ export default () => {
                                                 <button
                                                     type="button"
                                                     onClick={() => setMobileMenuOpen(false)}
-                                                    className="-m-2.5 rounded-md p-2.5 text-gray-700">
+                                                    className="-m-2.5 rounded-md p-2.5 primary-text">
                                                     <span className="sr-only">Close menu</span>
                                                     <XMarkIcon aria-hidden="true" className="size-6" />
                                                 </button>
@@ -178,21 +182,21 @@ export default () => {
                                                         <Link
                                                             to={Path.HOME}
                                                             onClick={() => setMobileMenuOpen(false)}
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
                                                         >
                                                             Home
                                                         </Link>
                                                         <Link
                                                             to={Path.PAGE_ONE}
                                                             onClick={() => setMobileMenuOpen(false)}
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
                                                         >
                                                             Page 1
                                                         </Link>
                                                         <Link
                                                             to={Path.PAGE_TWO}
                                                             onClick={() => setMobileMenuOpen(false)} 
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
                                                         >
                                                             Page 2
                                                         </Link>
@@ -202,7 +206,7 @@ export default () => {
                                                                 toggleDarkMode()
                                                                 setMobileMenuOpen(false)
                                                             }}
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 cursor-pointer"
+                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50 cursor-pointer"
                                                         >{ darkMode ? 'Light mode' : 'Dark mode'}</a>
 
                                                     </div>
@@ -213,7 +217,7 @@ export default () => {
                                                                     handleLogout();
                                                                     setMobileMenuOpen(false)
                                                                 }}
-                                                                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 cursor-pointer"
+                                                                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50 cursor-pointer"
                                                             >
                                                                 Logout
                                                             </a>
@@ -222,14 +226,14 @@ export default () => {
                                                                 <Link
                                                                     to={Path.LOGIN}
                                                                     onClick={() => setMobileMenuOpen(false)} // Close menu on click
-                                                                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                                                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
                                                                 >
                                                                     Sign in
                                                                 </Link>
                                                                 <Link
                                                                     to={Path.REGISTER}
                                                                     onClick={() => setMobileMenuOpen(false)} // Close menu on click
-                                                                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                                                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
                                                                 >
                                                                     Register
                                                                 </Link>
