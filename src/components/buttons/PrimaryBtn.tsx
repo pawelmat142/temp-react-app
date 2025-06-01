@@ -3,7 +3,7 @@ import { BtnInterface } from '../btn-interface';
 import { Link } from 'react-router-dom';
 
 
-const PrimaryBtn: React.FC<BtnInterface> = ({ to='', type = 'button', children, fullWidth=true, className }) => {
+const PrimaryBtn: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, children, fullWidth=true, className }) => {
     let myClass = `flex justify-center rounded-md btn-primary px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm`;
     if (className) {
         myClass += ` ${className}`;
@@ -20,7 +20,7 @@ const PrimaryBtn: React.FC<BtnInterface> = ({ to='', type = 'button', children, 
         );
     } else {    
         return(
-            <button type={type} className={myClass}>{children}</button>
+            <button type={type} onClick={onClick} className={myClass}>{children}</button>
         )
     }
 };

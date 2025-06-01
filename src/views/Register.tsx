@@ -1,37 +1,29 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import React from 'react';
 import { Path } from '../utils/path';
-import { Util } from '../utils/util';
-import fs from '../services/firebase';
-import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 import PrimaryBtn from '../components/buttons/PrimaryBtn';
+import fs from '../services/firebase';
+import { toast } from 'react-toastify';
+import SecondaryBtn from '../components/buttons/SecondaryBtn';
+import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 
 const Register: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [repeatEmail, setRepeatEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
-
-    const handleRegister = async (event: React.FormEvent) => {
-        event.preventDefault();
-
-        if (email !== repeatEmail) {
-            toast.error('Emails do not match.');
-            return;
-        }
-        if (password !== repeatPassword) {
-            toast.error('Passwords do not match.');
-            return;
-        }
+    const handleGoogleRegister = async () => {
         try {
-            await fs.registerUser(email, password);
-            toast.success('Account created successfully!');
-            setTimeout(() => {
-                window.location.href = Path.LOGIN;
-            }, 200);
+            await fs.registerWithGoogle();
+            toast.success('Registered with Google!');
         } catch (err: any) {
-            let msg = 'Failed to register. Please check your data.';
-            toast.error(Util.prepareErrorMsg(err, msg));
+            toast.error('Google registration failed.');
+            console.error('Google registration error:', err);
+        }
+    };
+
+    const handleGitHubRegister = async () => {
+        try {
+            await fs.registerWithGitHub();
+            toast.success('Registered with GitHub!');
+        } catch (err: any) {
+            toast.error('GitHub registration failed.');
+            console.error('GitHub registration error:', err);
         }
     };
 
@@ -49,86 +41,43 @@ const Register: React.FC = () => {
                     </h2>
                 </div>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form onSubmit={handleRegister} className="space-y-6">
-                        <div>
-                            <label htmlFor="email" className="block text-sm/6 font-medium primary-text">
-                                Email address
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
-                                    required
-                                    autoComplete="email"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="repeat-email" className="block text-sm/6 font-medium primary-text">
-                                Repeat email address
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="repeat-email"
-                                    name="repeat-email"
-                                    type="email"
-                                    value={repeatEmail}
-                                    onChange={(e) => setRepeatEmail(e.target.value)}
-                                    className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
-                                    required
-                                    autoComplete="email"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="block text-sm/6 font-medium primary-text">
-                                Password
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
-                                    required
-                                    autoComplete="new-password"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="repeat-password" className="block text-sm/6 font-medium primary-text">
-                                Repeat password
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="repeat-password"
-                                    name="repeat-password"
-                                    type="password"
-                                    value={repeatPassword}
-                                    onChange={(e) => setRepeatPassword(e.target.value)}
-                                    className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
-                                    required
-                                    autoComplete="new-password"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <PrimaryBtn type="submit" className='mt-5'>
-                                Register
-                            </PrimaryBtn>
+                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-4">
+                    <PrimaryBtn to={Path.MAIL_REGISTER} className="w-full flex items-center justify-center gap-2">
+                        {/* Bezpośrednio SVG zamiast <img src=...> */}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5H4.5a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-.876 1.797l-7.5 6a2.25 2.25 0 01-2.748 0l-7.5-6A2.25 2.25 0 012.25 6.993V6.75" />
+                        </svg>
+                        Register with Email
+                    </PrimaryBtn>
+                    <SecondaryBtn
+                        onClick={handleGoogleRegister}
+                        className="w-full gap-2"
+                    >
+                        <img
+                            src="https://www.svgrepo.com/show/475656/google-color.svg"
+                            alt="Google"
+                            className="h-5 w-5"
+                        />
+                        Register with Google
+                    </SecondaryBtn>
+                    <SecondaryBtn
+                        onClick={handleGitHubRegister}
+                        className="w-full gap-2">
+                        <img
+                            src="https://www.svgrepo.com/show/512317/github-142.svg"
+                            alt="GitHub"
+                            className="h-5 w-5"
+                        />
+                        Register with GitHub
+                    </SecondaryBtn>
 
-                            <PrimaryTextBtn to={Path.LOGIN} className='mt-5'>
-                                Already have an account? Sign in
-                            </PrimaryTextBtn>
-                        </div>
-                    </form>
+                    <PrimaryTextBtn to={Path.LOGIN} className='mt-5'>
+                        Already have an account? Sign in
+                    </PrimaryTextBtn>
+
+                    <PrimaryTextBtn to={Path.HOME}>
+                        Back to Home
+                    </PrimaryTextBtn>
                 </div>
             </div>
         </div>

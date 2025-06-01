@@ -2,7 +2,6 @@
 import PrimaryBtn from '../components/buttons/PrimaryBtn'
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn'
 import { Path } from '../utils/path'
-import { Link } from 'react-router-dom'
 export default function Home() {
   return (
       <div
@@ -25,7 +24,7 @@ export default function Home() {
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm/6 secondary-text ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               Announcing our next round of funding.{' '}
-              <a href="#" className="font-semibold primary-color">
+              <a href="https://example.com/read-more" className="font-semibold primary-color">
                 <span aria-hidden="true" className="absolute inset-0" />
                 Read more <span aria-hidden="true">&rarr;</span>
               </a>

@@ -3,5 +3,6 @@ export interface BtnInterface {
     type?: 'button' | 'submit' | 'reset';
     fullWidth?: boolean;
     children: React.ReactNode;
-    className?: string
+    className?: string;
+    onClick?: () => void;
 }

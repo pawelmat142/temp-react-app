@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  DialogTitle,
   TransitionChild
 } from '@headlessui/react'
 import { Link, useLocation } from 'react-router-dom';
@@ -20,7 +19,7 @@ import { Path } from '../utils/path';
 import { FsUtil } from '../utils/firebase.util';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 
-export default () => {
+const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
     const [userName, setUserName] = useState<string | null>(null);
     const [showSignIn, setShowSignIn] = useState<boolean>(true);
@@ -35,7 +34,7 @@ export default () => {
             } else {
                 setUserName(null);
             }
-        })
+        })       
     }, []);
     
     useEffect(() => {
@@ -81,6 +80,22 @@ export default () => {
                         />
                     </Link>
                 </div>
+
+                <div className="hidden lg:flex lg:gap-x-12">
+                    <Link to={Path.PAGE_ONE} className="text-sm/6 font-semibold primary-text">Strona 1</Link>
+                    <Link to={Path.PAGE_TWO} className="text-sm/6 font-semibold primary-text">Strona 2</Link>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            toggleDarkMode()
+                            setMobileMenuOpen(false)
+                        }}
+                        className="text-sm/6 font-semibold primary-text cursor-pointer bg-transparent border-none p-0"
+                    >
+                        { darkMode ? 'Light mode' : 'Dark mode'}
+                    </button>
+                </div>
+                
                 <div className="flex lg:hidden">
                     <button
                         type="button"
@@ -92,17 +107,7 @@ export default () => {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
                         </svg>
                     </button>
-                </div>
-                <div className="hidden lg:flex lg:gap-x-12">
-                    <Link to={Path.PAGE_ONE} className="text-sm/6 font-semibold primary-text">Strona 1</Link>
-                    <Link to={Path.PAGE_TWO} className="text-sm/6 font-semibold primary-text">Strona 2</Link>
-                    <a
-                            onClick={() => {
-                                toggleDarkMode()
-                                setMobileMenuOpen(false)
-                            }}
-                            className="text-sm/6 font-semibold primary-text cursor-pointer"
-                    >{ darkMode ? 'Light mode' : 'Dark mode'}</a>
+
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     {userName ? (
@@ -200,27 +205,27 @@ export default () => {
                                                         >
                                                             Page 2
                                                         </Link>
-
-                                                        <a
+                                                        <button
+                                                            type="button"
                                                             onClick={() => {
                                                                 toggleDarkMode()
                                                                 setMobileMenuOpen(false)
                                                             }}
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50 cursor-pointer"
-                                                        >{ darkMode ? 'Light mode' : 'Dark mode'}</a>
-
-                                                    </div>
-                                                    <div className="py-6">
+                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50 cursor-pointer bg-transparent border-none text-left w-full"
+                                                        >
+                                                            { darkMode ? 'Light mode' : 'Dark mode'}
+                                                        </button>
                                                         {userName ? (
-                                                            <a
+                                                            <button
+                                                                type="button"
                                                                 onClick={() => {
                                                                     handleLogout();
                                                                     setMobileMenuOpen(false)
                                                                 }}
-                                                                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50 cursor-pointer"
+                                                                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50 cursor-pointer bg-transparent border-none text-left w-full"
                                                             >
                                                                 Logout
-                                                            </a>
+                                                            </button>
                                                         ) : (
                                                             <>
                                                                 <Link
@@ -254,3 +259,5 @@ export default () => {
         </header>
     )
 }
+
+export default Header;

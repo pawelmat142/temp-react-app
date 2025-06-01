@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { BtnInterface } from "../btn-interface";
 
-const PrimaryTextBtn: React.FC<BtnInterface> = ({ to = '', children, type='button', fullWidth=true, className }) => {
+const PrimaryTextBtn: React.FC<BtnInterface> = ({ to = '', children, type='button', fullWidth, className }) => {
     let myClass = "flex justify-center rounded-md primary-transparent-control shadow-sm text-sm/6 font-semibold primary-color py-1.5 px-3";
     if (fullWidth) {
         className += ' w-full';        

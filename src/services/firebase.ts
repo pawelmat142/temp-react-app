@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential, onAuthStateChanged, Unsubscribe, NextOrObserver, User, ErrorFn, CompleteFn } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential, onAuthStateChanged, Unsubscribe, NextOrObserver, User, ErrorFn, CompleteFn, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
@@ -19,6 +19,22 @@ const fs = {
   auth,
   loginUser: (email: string, password: string): Promise<UserCredential> => signInWithEmailAndPassword(fs.auth, email, password),
   registerUser: (email: string, password: string): Promise<UserCredential> => createUserWithEmailAndPassword(fs.auth, email, password),
+  registerWithGoogle: (): Promise<UserCredential> => {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider);
+  },
+  loginWithGoogle: (): Promise<UserCredential> => {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider);
+  },
+  registerWithGitHub: (): Promise<UserCredential> => {
+    const provider = new GithubAuthProvider();
+    return signInWithPopup(auth, provider);
+  },
+  loginWithGitHub: (): Promise<UserCredential> => {
+    const provider = new GithubAuthProvider();
+    return signInWithPopup(auth, provider);
+  },
   onAuthChanged: (nextOrObserver: NextOrObserver<User>, error?: ErrorFn, completed?: CompleteFn): Unsubscribe => {
     return onAuthStateChanged(auth, nextOrObserver, error, completed)
   }
