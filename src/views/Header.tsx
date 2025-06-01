@@ -30,7 +30,7 @@ interface NavItem {
 
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
-    const { user } = useUserContext(); // zakładam, że hook zwraca obiekt user
+    const { user } = useUserContext()
 
     const NAV_ITEMS: NavItem[] = [
         { to: Path.HOME, label: "Home" },

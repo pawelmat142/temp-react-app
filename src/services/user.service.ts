@@ -1,4 +1,4 @@
-import { collection, addDoc, Firestore, getDocs, query, where, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, Firestore, getDocs, query, where, doc, updateDoc, onSnapshot } from "firebase/firestore";
 import firestore from "./firestore";
 import { UserCredential, UserInfo } from "firebase/auth";
 import fs from "./firebase";
@@ -114,6 +114,26 @@ export class _UserService {
             toast.error('Błąd zapisu ustawień.');
             console.error('Update settings error:', err);
         }
+    }
+
+    /**
+     * Nasłuchuje na zmiany dokumentu użytkownika o podanym UID.
+     * @param uid UID użytkownika
+     * @param callback Funkcja wywoływana przy każdej zmianie (lub usunięciu) dokumentu użytkownika
+     * @returns Funkcja do odsubskrybowania nasłuchiwania
+     */
+    public listenByUid = (uid: string, callback: (user: User | null) => void): (() => void) => {
+        const usersRef = collection(this.firestore, this.COLLECTION_NAME);
+        const q = query(usersRef, where("uid", "==", uid));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            if (querySnapshot.empty) {
+                callback(null);
+            } else {
+                const doc = querySnapshot.docs[0];
+                callback(doc.data() as User);
+            }
+        });
+        return unsubscribe;
     }
 
 }

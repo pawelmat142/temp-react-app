@@ -20,22 +20,29 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const userService = UserService
-
   useEffect(() => {
-    const unsubscribe = fs.onAuthChanged(async (u) => {
+    let unsubscribeUserDoc: (() => void) | undefined;
+
+    const unsubscribe = fs.onAuthChanged((u) => {
       setFirebaseUser(u);
       if (u?.uid) {
-        const _user = await userService.getByUid(u.uid)
-        setUser(_user || null)
+        unsubscribeUserDoc?.(); // Odsubskrybuj poprzedni listener jeśli był
+        unsubscribeUserDoc = UserService.listenByUid(u.uid, setUser);
       } else {
         setUser(null);
+        setFirebaseUser(null);
+        unsubscribeUserDoc?.();
+        unsubscribeUserDoc = undefined;
       }
       console.warn("User changed:", u);
       setLoading(false);
     });
-    return unsubscribe;
-  }, [userService]);
+
+    return () => {
+      unsubscribe();
+      unsubscribeUserDoc?.();
+    };
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, loading, firebaseUser }}>
