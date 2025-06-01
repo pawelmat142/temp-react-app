@@ -24,7 +24,7 @@ const Register: React.FC = () => {
                     </h2>
                 </div>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-4">
+                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <PrimaryBtn to={Path.MAIL_REGISTER} className="w-full flex items-center justify-center gap-2">
                         {/* Bezpośrednio SVG zamiast <img src=...> */}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
@@ -34,7 +34,7 @@ const Register: React.FC = () => {
                     </PrimaryBtn>
                     <SecondaryBtn
                         onClick={userService.handleGoogleRegister}
-                        className="w-full gap-2"
+                        className="w-full gap-2 mt-5"
                     >
                         <img
                             src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -45,7 +45,7 @@ const Register: React.FC = () => {
                     </SecondaryBtn>
                     <SecondaryBtn
                         onClick={userService.handleGitHubRegister}
-                        className="w-full gap-2">
+                        className="w-full gap-2 mt-5">
                         <img
                             src="https://www.svgrepo.com/show/512317/github-142.svg"
                             alt="GitHub"

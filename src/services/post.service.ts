@@ -1,4 +1,4 @@
-import { Firestore, setDoc, doc } from "firebase/firestore";
+import { Firestore, setDoc, doc, getDocs, collection } from "firebase/firestore";
 import firestore from "./firestore";
 
 export interface Post {
@@ -8,6 +8,17 @@ export interface Post {
     votes?: { uid: string, value: number, date: Date }[]
     title?: string
     content: string
+    createdAt: Date // dodane pole
+    avatar: {
+        colorHex: string
+        letterColorHex: string
+        letter: string
+    }
+}
+
+export interface PostsCache {
+    posts: Post[]
+    date: Date
 }
 
 export class _PostService {
@@ -25,8 +36,23 @@ export class _PostService {
      * @returns The ID of the post document.
      */
     public addPost = async (post: Post): Promise<string> => {
-        await setDoc(doc(this.firestore, "posts", post.id), post);
+        // Dodaj pole createdAt jeśli nie istnieje
+        const postWithDate = {
+            ...post,
+            createdAt: post.createdAt || new Date()
+        };
+        await setDoc(doc(this.firestore, "posts", post.id), postWithDate);
         return post.id;
+    }
+
+    public getPosts = async (): Promise<Post[]> => {
+        console.warn("getPosts called")
+        const querySnapshot = await getDocs(collection(firestore, "posts"));
+        const postsArr: Post[] = [];
+        querySnapshot.forEach(doc => {
+            postsArr.push(doc.data() as Post);
+        });
+        return postsArr
     }
 }
 

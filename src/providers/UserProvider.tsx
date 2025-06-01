@@ -27,11 +27,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setFirebaseUser(u);
       if (u?.uid) {
         const _user = await userService.getByUid(u.uid)
-        console.log(_user)
         setUser(_user || null)
       } else {
         setUser(null);
       }
+      console.warn("User changed:", u);
       setLoading(false);
     });
     return unsubscribe;
@@ -44,4 +44,4 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export const useUser = () => useContext(UserContext);
+export const useUserContext = () => useContext(UserContext);

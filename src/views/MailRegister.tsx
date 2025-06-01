@@ -103,7 +103,7 @@ const MailRegister: React.FC = () => {
                             autoComplete="new-password"
                         />
                         <div>
-                            <PrimaryBtn type="submit" className='mt-5'>
+                            <PrimaryBtn type="submit" className='mt-10'>
                                 Register
                             </PrimaryBtn>
                             <PrimaryTextBtn to={Path.REGISTER} className='mt-2'>

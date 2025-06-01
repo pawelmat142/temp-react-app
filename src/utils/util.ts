@@ -23,4 +23,16 @@ export abstract class Util {
         return msg
     }
     
+    public static beforeToday(date: Date | string): boolean {
+        let d: Date;
+        if (typeof date === "string") {
+            d = new Date(date);
+        } else {
+            d = date;
+        }
+        d.setHours(0, 0, 0, 0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return d.getTime() <= (today.getTime() - 24 * 60 * 60 * 1000);
+    }
 }

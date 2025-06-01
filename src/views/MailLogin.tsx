@@ -20,7 +20,7 @@ const MailLogin: React.FC = () => {
         try {
             await fs.loginUser(email, password)
             toast.success('Signed in successfully!')
-            navigate(Path.PAGE_ONE)
+            navigate(Path.POSTS)
         } catch (err) {
             toast.error(Util.prepareErrorMsg(err, 'Failed to log in. Please check your credentials'))
         }
@@ -83,7 +83,7 @@ const MailLogin: React.FC = () => {
                     </div>
 
                     <div className='mt-5'>
-                        <PrimaryBtn type="submit" className='mt-5'>Sign in</PrimaryBtn>
+                        <PrimaryBtn type="submit" className='mt-10'>Sign in</PrimaryBtn>
                         <PrimaryTextBtn to={Path.LOGIN} className='mt-5'>
                             Back to Register
                         </PrimaryTextBtn>

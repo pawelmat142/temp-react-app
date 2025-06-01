@@ -41,9 +41,8 @@ const Login: React.FC = () => {
                     </h2>
                 </div>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-4">
+                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <PrimaryBtn to={Path.MAIL_LOGIN} className="w-full flex items-center justify-center gap-2">
-                        {/* SVG mail icon */}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5H4.5a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-.876 1.797l-7.5 6a2.25 2.25 0 01-2.748 0l-7.5-6A2.25 2.25 0 012.25 6.993V6.75" />
                         </svg>
@@ -51,7 +50,7 @@ const Login: React.FC = () => {
                     </PrimaryBtn>
                     <SecondaryBtn
                         onClick={handleGoogleLogin}
-                        className="w-full gap-2"
+                        className="w-full gap-2 mt-5"
                     >
                         <img
                             src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -62,7 +61,7 @@ const Login: React.FC = () => {
                     </SecondaryBtn>
                     <SecondaryBtn
                         onClick={handleGitHubLogin}
-                        className="w-full gap-2"
+                        className="w-full gap-2 mt-5"
                     >
                         <img
                             src="https://www.svgrepo.com/show/512317/github-142.svg"

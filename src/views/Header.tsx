@@ -17,11 +17,11 @@ import { toast } from 'react-toastify';
 import { Util } from '../utils/util';
 import { Path } from '../utils/path';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
-import { useUser } from '../providers/UserProvider';
+import { useUserContext } from '../providers/UserProvider';
 
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
-    const { user } = useUser(); // zakładam, że hook zwraca obiekt user
+    const { user } = useUserContext(); // zakładam, że hook zwraca obiekt user
     const [darkMode, setDarkMode] = useState<boolean>(document.documentElement.classList.contains('dark'));
 
     const handleLogout = async () => {
@@ -64,9 +64,8 @@ const Header = () => {
                 </div>
 
                 <div className="hidden lg:flex lg:gap-x-12">
-                    <Link to={Path.PAGE_ONE} className="text-sm/6 font-semibold primary-text">Strona 1</Link>
-                    <Link to={Path.PAGE_TWO} className="text-sm/6 font-semibold primary-text">Strona 2</Link>
                     <Link to={Path.ADD_POST} className="text-sm/6 font-semibold primary-text">Add Post</Link>
+                    <Link to={Path.POSTS} className="text-sm/6 font-semibold primary-text">Posts</Link>
                     <button
                         type="button"
                         onClick={() => {
@@ -185,25 +184,18 @@ const Header = () => {
                                                             Home
                                                         </Link>
                                                         <Link
-                                                            to={Path.PAGE_ONE}
-                                                            onClick={() => setMobileMenuOpen(false)}
-                                                            className="mobile-menu-item primary-text"
-                                                        >
-                                                            Page 1
-                                                        </Link>
-                                                        <Link
-                                                            to={Path.PAGE_TWO}
-                                                            onClick={() => setMobileMenuOpen(false)} 
-                                                            className="mobile-menu-item primary-text"
-                                                        >
-                                                            Page 2
-                                                        </Link>
-                                                        <Link
                                                             to={Path.ADD_POST}
                                                             onClick={() => setMobileMenuOpen(false)}
                                                             className="mobile-menu-item primary-text"
                                                         >
                                                             Add Post
+                                                        </Link>
+                                                        <Link
+                                                            to={Path.POSTS}
+                                                            onClick={() => setMobileMenuOpen(false)}
+                                                            className="mobile-menu-item primary-text"
+                                                        >
+                                                            Posts
                                                         </Link>
                                                         <button
                                                             type="button"
