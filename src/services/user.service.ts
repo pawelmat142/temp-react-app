@@ -1,4 +1,4 @@
-import { collection, addDoc, Firestore, getDocs, query, where } from "firebase/firestore";
+import { collection, addDoc, Firestore, getDocs, query, where, doc, updateDoc } from "firebase/firestore";
 import firestore from "./firestore";
 import { UserCredential, UserInfo } from "firebase/auth";
 import fs from "./firebase";
@@ -10,13 +10,19 @@ export interface User {
     email?: string
     displayName?: string
     provider?: 'google' | 'github' | 'email'
-    settings?: { [key: string]: string },
+    settings?: UserSettings,
     userInfo?: UserInfo
+}
+
+export interface UserSettings {
+    visibleByStrangers?: boolean
 }
 
 export class _UserService {
 
     private readonly firestore: Firestore = firestore
+
+    private readonly COLLECTION_NAME = "users";
 
     constructor() {
         console.log("UserService initialized")
@@ -78,7 +84,7 @@ export class _UserService {
     }
 
     private addUser = async (user: User): Promise<string> => {
-        const docRef = await addDoc(collection(this.firestore, "users"), user);
+        const docRef = await addDoc(collection(this.firestore, this.COLLECTION_NAME), user);
         return docRef.id;
     }
 
@@ -91,6 +97,23 @@ export class _UserService {
         }
         const doc = querySnapshot.docs[0];
         return doc.data() as User;
+    }
+
+    public updateSettings = async (uid: string, settings: UserSettings) => {
+        try {
+            const usersRef = collection(this.firestore, this.COLLECTION_NAME);
+            const q = query(usersRef, where("uid", "==", uid));
+            const querySnapshot = await getDocs(q);
+            if (querySnapshot.empty) {
+                throw new Error("User not found");
+            }
+            const docRef = doc(this.firestore, this.COLLECTION_NAME, querySnapshot.docs[0].id);
+            await updateDoc(docRef, { settings });
+            toast.success('Ustawienia zostały zapisane.');
+        } catch (err: any) {
+            toast.error('Błąd zapisu ustawień.');
+            console.error('Update settings error:', err);
+        }
     }
 
 }

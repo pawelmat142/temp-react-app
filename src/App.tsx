@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MailLogin from './views/MailLogin';
 import MailRegister from './views/MailRegister';
 import Register from './views/Register';
@@ -13,6 +13,7 @@ import { UserProvider } from './providers/UserProvider';
 import AddPost from './views/AddPost';
 import PostList from './views/PostList';
 import { PostsProvider } from './providers/PostsProvider';
+import Settings from './views/Settings';
 
 const App: React.FC = () => {
 
@@ -30,19 +31,24 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <UserProvider>
-      <PostsProvider>
-        <Router>
+    <BrowserRouter>
+      <UserProvider>
+        <PostsProvider>
           <Header />
 
           <Routes>
+            
             <Route path={Path.HOME} element={<Home />} />
+
+            <Route path={Path.POSTS} element={<PostList />} />
+            <Route path={Path.ADD_POST} element={<AddPost />} />
+
+            <Route path={Path.LOGIN} element={<Login />} />
+            <Route path={Path.REGISTER} element={<Register />} />
             <Route path={Path.MAIL_LOGIN} element={<MailLogin />} />
             <Route path={Path.MAIL_REGISTER} element={<MailRegister />} />
-            <Route path={Path.REGISTER} element={<Register />} />
-            <Route path={Path.LOGIN} element={<Login />} />
-            <Route path={Path.ADD_POST} element={<AddPost />} />
-            <Route path={Path.POSTS} element={<PostList />} />
+            <Route path={Path.SETTINGS} element={<Settings />} />
+
           </Routes>
 
           <ToastContainer
@@ -57,9 +63,9 @@ const App: React.FC = () => {
             pauseOnHover
             theme="light"
           />
-        </Router>
-      </PostsProvider>
-    </UserProvider>
+        </PostsProvider>
+      </UserProvider>
+    </BrowserRouter>
   );
 };
 

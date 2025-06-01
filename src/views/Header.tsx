@@ -19,10 +19,28 @@ import { Path } from '../utils/path';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 import { useUserContext } from '../providers/UserProvider';
 
+interface NavItem {
+    to?: string;
+    onClick?: () => void;
+    label: string;
+    authGuard?: boolean; 
+    authSkip?: boolean; 
+    skipHeader?: boolean
+}
+
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
     const { user } = useUserContext(); // zakładam, że hook zwraca obiekt user
-    const [darkMode, setDarkMode] = useState<boolean>(document.documentElement.classList.contains('dark'));
+
+    const NAV_ITEMS: NavItem[] = [
+        { to: Path.HOME, label: "Home" },
+        { to: Path.ADD_POST, label: "Add Post", authGuard: true },
+        { to: Path.POSTS, label: "Posts", authGuard: true },
+        { to: Path.LOGIN, label: "Sign in", authSkip: true, skipHeader: true },
+        { to: Path.SETTINGS, label: "Settings", authGuard: true },
+    ]
+        .filter(item => !item.authGuard || user)
+        .filter(item => !item.authSkip || !user)
 
     const handleLogout = async () => {
         try {
@@ -34,19 +52,6 @@ const Header = () => {
 
         } catch (error) {
             toast.error(Util.prepareErrorMsg(error, 'Failed to log out. Please try again.'))
-        }
-    };
-
-    const toggleDarkMode = () => {
-        const html = document.documentElement;
-        if (html.classList.contains('dark')) {
-            html.classList.remove('dark');
-            localStorage.theme = 'light';
-            setDarkMode(false)
-        } else {
-            html.classList.add('dark');
-            localStorage.theme = 'dark';
-            setDarkMode(true)
         }
     };
 
@@ -64,18 +69,29 @@ const Header = () => {
                 </div>
 
                 <div className="hidden lg:flex lg:gap-x-12">
-                    <Link to={Path.ADD_POST} className="text-sm/6 font-semibold primary-text">Add Post</Link>
-                    <Link to={Path.POSTS} className="text-sm/6 font-semibold primary-text">Posts</Link>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            toggleDarkMode()
-                            setMobileMenuOpen(false)
-                        }}
-                        className="text-sm/6 font-semibold primary-text cursor-pointer bg-transparent border-none p-0"
-                    >
-                        { darkMode ? 'Light mode' : 'Dark mode'}
-                    </button>
+                    {NAV_ITEMS
+                        .filter(item => !item.skipHeader)
+                        .map(item => {
+                        if (item.to) {
+                            return (
+                                <Link key={item.to} to={item.to} className="text-sm/6 font-semibold primary-text">
+                                    {item.label}
+                                </Link>
+                            )
+                        }
+                        if (item.onClick) {
+                            return (
+                                <button
+                                    key={item.label}
+                                    onClick={item.onClick}
+                                    className="text-sm/6 font-semibold primary-text bg-transparent border-none p-0 cursor-pointer"
+                                >
+                                    {item.label}
+                                </button>
+                            )
+                        }
+                        return ''
+                    })}
                 </div>
                 
                 <div className="flex lg:hidden">
@@ -175,81 +191,64 @@ const Header = () => {
 
                                             <div className="mt-6 flow-root">
                                                 <div className="-my-6 divide-y divide-gray-500/10">
-                                                    <div className="space-y-2 py-6">
-                                                        <Link
-                                                            to={Path.HOME}
-                                                            onClick={() => setMobileMenuOpen(false)}
-                                                            className="mobile-menu-item primary-text"
-                                                        >
-                                                            Home
-                                                        </Link>
-                                                        <Link
-                                                            to={Path.ADD_POST}
-                                                            onClick={() => setMobileMenuOpen(false)}
-                                                            className="mobile-menu-item primary-text"
-                                                        >
-                                                            Add Post
-                                                        </Link>
-                                                        <Link
-                                                            to={Path.POSTS}
-                                                            onClick={() => setMobileMenuOpen(false)}
-                                                            className="mobile-menu-item primary-text"
-                                                        >
-                                                            Posts
-                                                        </Link>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                toggleDarkMode()
-                                                                setMobileMenuOpen(false)
-                                                            }}
-                                                            className="mobile-menu-item primary-text cursor-pointer bg-transparent border-none text-left w-full"
-                                                        >
-                                                            { darkMode ? 'Light mode' : 'Dark mode'}
-                                                        </button>
-                                                        {(user?.displayName || user?.name || user?.userInfo?.photoURL) ? (
-                                                            <div className="flex items-center gap-3 px-3 py-2">
-                                                                {user?.userInfo?.photoURL && (
-                                                                    <img
-                                                                        src={user.userInfo.photoURL}
-                                                                        alt={user.displayName || user.name || "avatar"}
-                                                                        className="h-8 w-8 rounded-full object-cover"
-                                                                    />
-                                                                )}
-                                                                {(user?.displayName || user?.name) && (
-                                                                    <span className="text-base font-semibold primary-text">
-                                                                        {user.displayName || user.name}
-                                                                    </span>
-                                                                )}
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        handleLogout();
-                                                                        setMobileMenuOpen(false)
-                                                                    }}
-                                                                    className="pl-10 primary-text bold hover:bg-gray-100 text-blue-600 hover:text-blue-800"
-                                                                >
-                                                                    Logout
-                                                                </button>
-                                                            </div>
-                                                        ) : (
-                                                            <>
-                                                                <Link
-                                                                    to={Path.LOGIN}
-                                                                    onClick={() => setMobileMenuOpen(false)} // Close menu on click
-                                                                    className="mobile-menu-item primary-text"
-                                                                >
-                                                                    Sign in
-                                                                </Link>
-                                                                <Link
-                                                                    to={Path.REGISTER}
-                                                                    onClick={() => setMobileMenuOpen(false)} // Close menu on click
-                                                                    className="mobile-menu-item primary-text"
-                                                                >
-                                                                    Register
-                                                                </Link>
-                                                            </>
-                                                        )}
+                                                    <div className="py-6">
+                                                                                                                {(user?.displayName || user?.name || user?.userInfo?.photoURL) ? (
+                                                        <div className="flex items-center gap-3 px-3 py-2 mb-4">
+                                                            {user?.userInfo?.photoURL && (
+                                                                <img
+                                                                    src={user.userInfo.photoURL}
+                                                                    alt={user.displayName || user.name || "avatar"}
+                                                                    className="h-8 w-8 rounded-full object-cover"
+                                                                />
+                                                            )}
+                                                            {(user?.displayName || user?.name) && (
+                                                                <span className="text-base font-semibold primary-text">
+                                                                    {user.displayName || user.name}
+                                                                </span>
+                                                            )}
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    handleLogout();
+                                                                    setMobileMenuOpen(false)
+                                                                }}
+                                                                className="pl-10 primary-text bold hover:bg-gray-100 text-blue-600 hover:text-blue-800"
+                                                            >
+                                                                Logout
+                                                            </button>
+                                                        </div>
+                                                    ) : ''}
+                                                    {NAV_ITEMS
+                                                        .map(item => {
+                                                            if (item.to) {
+                                                                return (
+                                                                    <Link
+                                                                        key={item.to}
+                                                                        to={item.to}
+                                                                        onClick={() => setMobileMenuOpen(false)}
+                                                                        className="flex justify-between gap-x-6 py-3 cursor-pointer secondary-bg rounded-lg shadow mb-2 px-4 items-center font-semibold primary-text"
+                                                                    >
+                                                                        {item.label}
+                                                                    </Link>
+                                                                )
+                                                            }
+                                                            if (item.onClick) {
+                                                                return (
+                                                                    <button
+                                                                        key={item.label}
+                                                                        onClick={() => {
+                                                                            item.onClick?.();
+                                                                            setMobileMenuOpen(false);
+                                                                        }}
+                                                                        className="flex justify-between gap-x-6 py-3 cursor-pointer secondary-bg rounded-lg shadow mb-2 px-4 items-center font-semibold primary-text"
+                                                                    >
+                                                                        {item.label}
+                                                                    </button>
+                                                                )
+                                                            }
+                                                            return ''
+                                                        })}
+
                                                     </div>
                                                 </div>
                                             </div>

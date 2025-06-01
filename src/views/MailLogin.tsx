@@ -3,16 +3,15 @@ import { toast } from 'react-toastify';
 import { Path } from '../utils/path';
 import { Util } from '../utils/util';
 import fs from '../services/firebase';
-import { useNavigate } from 'react-router-dom';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 import PrimaryBtn from '../components/buttons/PrimaryBtn';
+import { useNavigate } from 'react-router-dom';
 
 
 const MailLogin: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();

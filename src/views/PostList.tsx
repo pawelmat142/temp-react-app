@@ -20,7 +20,7 @@ const PostList: React.FC = () => {
                 </svg>
             </div>
         ) : (
-            <div className="post-list max-w-2xl mx-auto pb-20">
+            <div className="post-list max-w-2xl mx-auto pb-20 px-5">
                 <h2 className="mt-10 mb-10 text-center text-2xl/9 font-bold tracking-tight primary-text">
                     Posts
                 </h2>

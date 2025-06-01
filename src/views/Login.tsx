@@ -5,11 +5,15 @@ import SecondaryBtn from '../components/buttons/SecondaryBtn';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 import fs from '../services/firebase';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
+    const navigate = useNavigate();
+
     const handleGoogleLogin = async () => {
         try {
             await fs.loginWithGoogle();
+            navigate(Path.POSTS)
             toast.success('Logged in with Google!');
         } catch (err: any) {
             toast.error('Google login failed.');
@@ -20,6 +24,7 @@ const Login: React.FC = () => {
     const handleGitHubLogin = async () => {
         try {
             await fs.loginWithGitHub();
+            navigate(Path.POSTS)
             toast.success('Logged in with GitHub!');
         } catch (err: any) {
             toast.error('GitHub login failed.');

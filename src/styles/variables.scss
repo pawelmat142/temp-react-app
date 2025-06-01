@@ -16,6 +16,11 @@ $primary-text-dark: #d1d5db;
 $secondary-text-light: #6b7280;
 $secondary-text-dark: #9ca3af;
 
+// TODO
+$secondary-bg: #374151;
+$secondary-bg-dark: #374151;
+
+
 $primary-color: #4f46e5;
 $primary-color-dark: dark-mode-color($primary-color);
 $primary-color-active: active-color($primary-color);
@@ -34,6 +39,9 @@ $gray-900: #111827;
 .primary-bg {
   background-color: $primary-bg-light;
 }
+.secondary-bg {
+  background-color: $gray-300;
+}
 .primary-text {
   color: $primary-text-light;
 }
@@ -51,6 +59,9 @@ $gray-900: #111827;
 .dark {
   .primary-bg {
     background-color: $primary-bg-dark;
+  }
+  .secondary-bg {
+    background-color: $gray-700;
   }
   .primary-text {
     color: $primary-text-dark;
