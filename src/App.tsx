@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Path } from './utils/path';
 import Login from './views/Login';
 import { UserProvider } from './providers/UserProvider';
+import AddPost from './views/AddPost';
 
 const App: React.FC = () => {
 
@@ -41,6 +42,7 @@ const App: React.FC = () => {
           <Route path={Path.LOGIN} element={<Login />} />
           <Route path={Path.PAGE_ONE} element={<PageOne />} />
           <Route path={Path.PAGE_TWO} element={<PageTwo />} />
+          <Route path={Path.ADD_POST} element={<AddPost />} />
         </Routes>
 
         <ToastContainer

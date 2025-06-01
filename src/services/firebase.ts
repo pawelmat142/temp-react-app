@@ -37,7 +37,8 @@ const fs = {
   },
   onAuthChanged: (nextOrObserver: NextOrObserver<User>, error?: ErrorFn, completed?: CompleteFn): Unsubscribe => {
     return onAuthStateChanged(auth, nextOrObserver, error, completed)
-  }
+  },
+  generateId: () => crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()
 }
 
 

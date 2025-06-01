@@ -12,7 +12,7 @@ const LabeledInput: React.FC<{
 }> = ({ id, label, type = "text", value, onChange, required, autoComplete, name }) => (
     <div>
         <label htmlFor={id} className="block text-sm/6 font-medium primary-text">
-            {label}
+            {required && <span className="text-red-500">*</span>} {label}
         </label>
         <div className="mt-2">
             <input

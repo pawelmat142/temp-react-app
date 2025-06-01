@@ -66,6 +66,7 @@ const Header = () => {
                 <div className="hidden lg:flex lg:gap-x-12">
                     <Link to={Path.PAGE_ONE} className="text-sm/6 font-semibold primary-text">Strona 1</Link>
                     <Link to={Path.PAGE_TWO} className="text-sm/6 font-semibold primary-text">Strona 2</Link>
+                    <Link to={Path.ADD_POST} className="text-sm/6 font-semibold primary-text">Add Post</Link>
                     <button
                         type="button"
                         onClick={() => {
@@ -196,6 +197,13 @@ const Header = () => {
                                                             className="mobile-menu-item primary-text"
                                                         >
                                                             Page 2
+                                                        </Link>
+                                                        <Link
+                                                            to={Path.ADD_POST}
+                                                            onClick={() => setMobileMenuOpen(false)}
+                                                            className="mobile-menu-item primary-text"
+                                                        >
+                                                            Add Post
                                                         </Link>
                                                         <button
                                                             type="button"
