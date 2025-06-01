@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Path } from './utils/path';
 import Login from './views/Login';
+import { UserProvider } from './providers/UserProvider';
 
 const App: React.FC = () => {
 
@@ -28,32 +29,34 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Router>
-      <Header />
+    <UserProvider>
+      <Router>
+        <Header />
 
-      <Routes>
-        <Route path={Path.HOME} element={<Home />} />
-        <Route path={Path.MAIL_LOGIN} element={<MailLogin />} />
-        <Route path={Path.MAIL_REGISTER} element={<MailRegister />} />
-        <Route path={Path.REGISTER} element={<Register />} />
-        <Route path={Path.LOGIN} element={<Login />} />
-        <Route path={Path.PAGE_ONE} element={<PageOne />} />
-        <Route path={Path.PAGE_TWO} element={<PageTwo />} />
-      </Routes>
+        <Routes>
+          <Route path={Path.HOME} element={<Home />} />
+          <Route path={Path.MAIL_LOGIN} element={<MailLogin />} />
+          <Route path={Path.MAIL_REGISTER} element={<MailRegister />} />
+          <Route path={Path.REGISTER} element={<Register />} />
+          <Route path={Path.LOGIN} element={<Login />} />
+          <Route path={Path.PAGE_ONE} element={<PageOne />} />
+          <Route path={Path.PAGE_TWO} element={<PageTwo />} />
+        </Routes>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </Router>
+    </UserProvider>
   );
 };
 

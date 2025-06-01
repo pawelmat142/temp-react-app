@@ -1,32 +1,15 @@
 import React from 'react';
 import { Path } from '../utils/path';
 import PrimaryBtn from '../components/buttons/PrimaryBtn';
-import fs from '../services/firebase';
-import { toast } from 'react-toastify';
 import SecondaryBtn from '../components/buttons/SecondaryBtn';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
+import UserService from '../services/user.service';
 
 const Register: React.FC = () => {
-    const handleGoogleRegister = async () => {
-        try {
-            await fs.registerWithGoogle();
-            toast.success('Registered with Google!');
-        } catch (err: any) {
-            toast.error('Google registration failed.');
-            console.error('Google registration error:', err);
-        }
-    };
 
-    const handleGitHubRegister = async () => {
-        try {
-            await fs.registerWithGitHub();
-            toast.success('Registered with GitHub!');
-        } catch (err: any) {
-            toast.error('GitHub registration failed.');
-            console.error('GitHub registration error:', err);
-        }
-    };
+    const userService = UserService;
 
+    
     return (
         <div className="flex items-center justify-center">
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -50,7 +33,7 @@ const Register: React.FC = () => {
                         Register with Email
                     </PrimaryBtn>
                     <SecondaryBtn
-                        onClick={handleGoogleRegister}
+                        onClick={userService.handleGoogleRegister}
                         className="w-full gap-2"
                     >
                         <img
@@ -61,7 +44,7 @@ const Register: React.FC = () => {
                         Register with Google
                     </SecondaryBtn>
                     <SecondaryBtn
-                        onClick={handleGitHubRegister}
+                        onClick={userService.handleGitHubRegister}
                         className="w-full gap-2">
                         <img
                             src="https://www.svgrepo.com/show/512317/github-142.svg"

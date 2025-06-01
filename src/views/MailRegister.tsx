@@ -2,19 +2,27 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Path } from '../utils/path';
 import { Util } from '../utils/util';
-import fs from '../services/firebase';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 import PrimaryBtn from '../components/buttons/PrimaryBtn';
+import LabeledInput from '../components/form/LabeledInput';
+import UserService from '../services/user.service';
 
 const MailRegister: React.FC = () => {
     const [email, setEmail] = useState('');
     const [repeatEmail, setRepeatEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
+    const [name, setName] = useState('');
+
+    const userService = UserService
 
     const handleRegister = async (event: React.FormEvent) => {
         event.preventDefault();
 
+        if (!name.trim()) {
+            toast.error('Name is required.');
+            return;
+        }
         if (email !== repeatEmail) {
             toast.error('Emails do not match.');
             return;
@@ -24,8 +32,7 @@ const MailRegister: React.FC = () => {
             return;
         }
         try {
-            await fs.registerUser(email, password);
-            toast.success('Account created successfully!');
+            await userService.handleEmailRegister(email, password, name);
             setTimeout(() => {
                 window.location.href = Path.LOGIN;
             }, 200);
@@ -51,74 +58,50 @@ const MailRegister: React.FC = () => {
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form onSubmit={handleRegister} className="space-y-6">
-                        <div>
-                            <label htmlFor="email" className="block text-sm/6 font-medium primary-text">
-                                Email address
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
-                                    required
-                                    autoComplete="email"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="repeat-email" className="block text-sm/6 font-medium primary-text">
-                                Repeat email address
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="repeat-email"
-                                    name="repeat-email"
-                                    type="email"
-                                    value={repeatEmail}
-                                    onChange={(e) => setRepeatEmail(e.target.value)}
-                                    className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
-                                    required
-                                    autoComplete="email"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="block text-sm/6 font-medium primary-text">
-                                Password
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
-                                    required
-                                    autoComplete="new-password"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="repeat-password" className="block text-sm/6 font-medium primary-text">
-                                Repeat password
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="repeat-password"
-                                    name="repeat-password"
-                                    type="password"
-                                    value={repeatPassword}
-                                    onChange={(e) => setRepeatPassword(e.target.value)}
-                                    className="block w-full rounded-md primary-bg px-3 py-1.5 text-base primary-text primary-color-control sm:text-sm/6"
-                                    required
-                                    autoComplete="new-password"
-                                />
-                            </div>
-                        </div>
+                        <LabeledInput
+                            id="name"
+                            label="Name"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            required
+                            autoComplete="name"
+                        />
+                        <LabeledInput
+                            id="email"
+                            label="Email address"
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                            autoComplete="email"
+                        />
+                        <LabeledInput
+                            id="repeat-email"
+                            label="Repeat email address"
+                            type="email"
+                            value={repeatEmail}
+                            onChange={e => setRepeatEmail(e.target.value)}
+                            required
+                            autoComplete="email"
+                        />
+                        <LabeledInput
+                            id="password"
+                            label="Password"
+                            type="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                            autoComplete="new-password"
+                        />
+                        <LabeledInput
+                            id="repeat-password"
+                            label="Repeat password"
+                            type="password"
+                            value={repeatPassword}
+                            onChange={e => setRepeatPassword(e.target.value)}
+                            required
+                            autoComplete="new-password"
+                        />
                         <div>
                             <PrimaryBtn type="submit" className='mt-5'>
                                 Register

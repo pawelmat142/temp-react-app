@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import {
   Dialog,
@@ -8,7 +8,7 @@ import {
   DialogPanel,
   TransitionChild
 } from '@headlessui/react'
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -16,31 +16,13 @@ import fs from '../services/firebase';
 import { toast } from 'react-toastify';
 import { Util } from '../utils/util';
 import { Path } from '../utils/path';
-import { FsUtil } from '../utils/firebase.util';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
+import { useUser } from '../providers/UserProvider';
 
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
-    const [userName, setUserName] = useState<string | null>(null);
-    const [showSignIn, setShowSignIn] = useState<boolean>(true);
+    const { user } = useUser(); // zakładam, że hook zwraca obiekt user
     const [darkMode, setDarkMode] = useState<boolean>(document.documentElement.classList.contains('dark'));
-    const location = useLocation()
-    
-    useEffect(() => {
-        console.log('useEffect 2')
-        fs.onAuthChanged(user => {
-            if (user) {
-                setUserName(FsUtil.prepareDisplayName(user));
-            } else {
-                setUserName(null);
-            }
-        })       
-    }, []);
-    
-    useEffect(() => {
-        console.log('useEffect 1')
-        setShowSignIn(![Path.LOGIN, Path.REGISTER].includes(location.pathname))
-    }, [location]);
 
     const handleLogout = async () => {
         try {
@@ -110,26 +92,36 @@ const Header = () => {
 
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    {userName ? (
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm/6 font-semibold primary-text">
-                                {userName}
-                            </span>
+                    {(user?.displayName || user?.name || user?.userInfo?.photoURL) ? (
+                        <div className="flex items-center gap-2">
+                            {/* Avatar */}
+                            {user?.userInfo?.photoURL && (
+                                <img
+                                    src={user.userInfo.photoURL}
+                                    alt={user.displayName || user.name || "avatar"}
+                                    className="h-8 w-8 rounded-full object-cover"
+                                />
+                            )}
+                            {(user?.displayName || user?.name) && (
+                                <span className="text-sm/6 font-semibold primary-text">
+                                    {user.displayName || user.name}
+                                </span>
+                            )}
                             <button
                                 onClick={handleLogout}
                                 className="p-2 rounded-full hover:bg-gray-100 text-blue-600 hover:text-blue-800"
                                 title="Logout"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
                                 </svg>
                             </button>
                         </div>
-                    ) : showSignIn ?  (
+                    ) : (
                         <PrimaryTextBtn to={Path.LOGIN} fullWidth={false}>
                             Sign in <span aria-hidden="true">&rarr;</span>
                         </PrimaryTextBtn>
-                    ) : ''}
+                    ) }
                 </div>
             </nav>
 
@@ -187,21 +179,21 @@ const Header = () => {
                                                         <Link
                                                             to={Path.HOME}
                                                             onClick={() => setMobileMenuOpen(false)}
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
+                                                            className="mobile-menu-item primary-text"
                                                         >
                                                             Home
                                                         </Link>
                                                         <Link
                                                             to={Path.PAGE_ONE}
                                                             onClick={() => setMobileMenuOpen(false)}
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
+                                                            className="mobile-menu-item primary-text"
                                                         >
                                                             Page 1
                                                         </Link>
                                                         <Link
                                                             to={Path.PAGE_TWO}
                                                             onClick={() => setMobileMenuOpen(false)} 
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
+                                                            className="mobile-menu-item primary-text"
                                                         >
                                                             Page 2
                                                         </Link>
@@ -211,34 +203,48 @@ const Header = () => {
                                                                 toggleDarkMode()
                                                                 setMobileMenuOpen(false)
                                                             }}
-                                                            className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50 cursor-pointer bg-transparent border-none text-left w-full"
+                                                            className="mobile-menu-item primary-text cursor-pointer bg-transparent border-none text-left w-full"
                                                         >
                                                             { darkMode ? 'Light mode' : 'Dark mode'}
                                                         </button>
-                                                        {userName ? (
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    handleLogout();
-                                                                    setMobileMenuOpen(false)
-                                                                }}
-                                                                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50 cursor-pointer bg-transparent border-none text-left w-full"
-                                                            >
-                                                                Logout
-                                                            </button>
+                                                        {(user?.displayName || user?.name || user?.userInfo?.photoURL) ? (
+                                                            <div className="flex items-center gap-3 px-3 py-2">
+                                                                {user?.userInfo?.photoURL && (
+                                                                    <img
+                                                                        src={user.userInfo.photoURL}
+                                                                        alt={user.displayName || user.name || "avatar"}
+                                                                        className="h-8 w-8 rounded-full object-cover"
+                                                                    />
+                                                                )}
+                                                                {(user?.displayName || user?.name) && (
+                                                                    <span className="text-base font-semibold primary-text">
+                                                                        {user.displayName || user.name}
+                                                                    </span>
+                                                                )}
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        handleLogout();
+                                                                        setMobileMenuOpen(false)
+                                                                    }}
+                                                                    className="pl-10 primary-text bold hover:bg-gray-100 text-blue-600 hover:text-blue-800"
+                                                                >
+                                                                    Logout
+                                                                </button>
+                                                            </div>
                                                         ) : (
                                                             <>
                                                                 <Link
                                                                     to={Path.LOGIN}
                                                                     onClick={() => setMobileMenuOpen(false)} // Close menu on click
-                                                                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
+                                                                    className="mobile-menu-item primary-text"
                                                                 >
                                                                     Sign in
                                                                 </Link>
                                                                 <Link
                                                                     to={Path.REGISTER}
                                                                     onClick={() => setMobileMenuOpen(false)} // Close menu on click
-                                                                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold primary-text hover:bg-gray-50"
+                                                                    className="mobile-menu-item primary-text"
                                                                 >
                                                                     Register
                                                                 </Link>
