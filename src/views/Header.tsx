@@ -38,6 +38,7 @@ const Header = () => {
         { to: Path.POSTS, label: "Posts", authGuard: true },
         { to: Path.LOGIN, label: "Sign in", authSkip: true, skipHeader: true },
         { to: Path.SETTINGS, label: "Settings", authGuard: true },
+        { to: Path.USERS, label: "Users", authGuard: true },
     ]
         .filter(item => !item.authGuard || user)
         .filter(item => !item.authSkip || !user)

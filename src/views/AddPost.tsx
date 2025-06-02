@@ -58,7 +58,7 @@ const AddPost: React.FC = () => {
     const [content, setContent] = useState('');
     const [loading, setLoading] = useState(false);
     const { user } = useUserContext(); // pobierz aktualnego usera
-    const { loadPosts } = usePostsContext();
+    const { refreshPosts } = usePostsContext();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -82,7 +82,7 @@ const AddPost: React.FC = () => {
 
         try {
             await PostService.addPost(post);
-            await loadPosts(); // odśwież posty po dodaniu
+            await refreshPosts();
             toast.success('Post added successfully!');
             setTitle('');
             setContent('');

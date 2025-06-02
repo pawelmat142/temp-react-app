@@ -1,5 +1,6 @@
 import { Firestore, setDoc, doc, getDocs, collection } from "firebase/firestore";
 import firestore from "./firestore";
+import { Util } from "../utils/util";
 
 export interface Post {
     createdByUid: string
@@ -9,17 +10,21 @@ export interface Post {
     title?: string
     content: string
     createdAt: Date // dodane pole
-    avatar: {
-        colorHex: string
-        letterColorHex: string
-        letter: string
-    }
+    avatar: Avatar
+}
+
+export interface Avatar {
+    colorHex: string
+    letterColorHex: string
+    letter: string
 }
 
 export interface PostsCache {
     posts: Post[]
     date: Date
 }
+
+const LOCALSTORAGE_KEY = "posts"; 
 
 export class _PostService {
 
@@ -28,6 +33,8 @@ export class _PostService {
     constructor() {
         console.log("UserService initialized")
     }
+
+
 
     /**
      * Adds a new post with a specific ID to the "posts" collection in Firestore.
@@ -46,6 +53,31 @@ export class _PostService {
     }
 
     public getPosts = async (): Promise<Post[]> => {
+        let posts = this.getFromLocalStorage()
+        if (posts?.length) {
+            return posts
+        }
+        await this.loadPostsFromFirestore()
+        posts = this.getFromLocalStorage()
+        return posts || []
+    }
+
+    public refreshPosts = async (): Promise<Post[]> => {
+        await this.loadPostsFromFirestore()
+        return this.getFromLocalStorage() || []
+    }
+
+    private loadPostsFromFirestore = async () => {
+        const posts = await this.fetchPosts()
+        const postsCache: PostsCache = {
+            posts: posts,
+            date: new Date(),
+        };
+        localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(postsCache));
+        console.warn("Posts loaded from Firestore:", postsCache);
+    };
+
+    private fetchPosts = async (): Promise<Post[]> => {
         console.warn("getPosts called")
         const querySnapshot = await getDocs(collection(firestore, "posts"));
         const postsArr: Post[] = [];
@@ -54,6 +86,31 @@ export class _PostService {
         });
         return postsArr
     }
+
+    private getFromLocalStorage = (): Post[] => {
+        const postsString = localStorage.getItem(LOCALSTORAGE_KEY);
+        let postsCache: PostsCache | null = null
+        if (postsString) {
+            try {
+                postsCache = JSON.parse(postsString);
+            } catch (e) {
+                console.error("Error parsing posts from localStorage:", e);
+                return []
+            }
+        }
+
+        if (!postsCache?.date) {
+            return []
+        }
+        const cacheDate = new Date(postsCache.date)
+
+        if (Util.beforeToday(cacheDate)) {
+            console.warn("Posts cache is older than today, returning empty array");
+            return []
+        }
+        console.log("Posts from localStorage:", postsCache);
+        return postsCache.posts || [];
+    };
 }
 
 const PostService = new _PostService()

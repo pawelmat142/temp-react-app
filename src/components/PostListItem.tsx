@@ -1,5 +1,5 @@
 import React, { useRef, useLayoutEffect, useState } from 'react';
-import { Post } from '../services/post.service';
+import { Avatar } from '../services/post.service';
 
 function formatDate(date: any) {
     if (date && typeof date === 'object' && 'seconds' in date) {
@@ -13,12 +13,15 @@ function formatDate(date: any) {
 }
 
 interface PostListItemProps {
-    post: Post;
+    avatar?: Avatar
+    title?: string
+    content: string
     expanded: boolean;
-    onExpand: () => void;
+    createdAt?: Date
+    onExpand?: () => void;
 }
 
-const PostListItem: React.FC<PostListItemProps> = ({ post, expanded, onExpand }) => {
+const PostListItem: React.FC<PostListItemProps> = ({ content, title, avatar, expanded, createdAt, onExpand }) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const [maxHeight, setMaxHeight] = useState('0px');
 
@@ -46,15 +49,15 @@ const PostListItem: React.FC<PostListItemProps> = ({ post, expanded, onExpand })
                 <div
                     className="post-list-item-avatar"
                     style={{
-                        backgroundColor: post.avatar?.colorHex ? `${post.avatar.colorHex}` : '#eee',
+                        backgroundColor: avatar?.colorHex ? `${avatar.colorHex}` : '#eee',
                     }}
                 >
-                    {post.avatar?.letter}
+                    {avatar?.letter}
                 </div>
                 <div className="min-w-0 flex-auto">
-                    <p className="text-sm/6 font-semibold primary-text">{post.title}</p>
+                    <p className="text-sm/6 font-semibold primary-text">{title}</p>
                     <div className={`post-list-item-short-content${expanded ? ' hidden' : ''}`}>
-                        <p className="text-xs/5 secondary-text whitespace-pre-line">{getShortContent(post.content)}</p>
+                        <p className="text-xs/5 secondary-text whitespace-pre-line">{getShortContent(content)}</p>
                     </div>
                     <div
                         ref={contentRef}
@@ -68,18 +71,18 @@ const PostListItem: React.FC<PostListItemProps> = ({ post, expanded, onExpand })
                             className="mt-1 text-xs/5 secondary-text whitespace-pre-line"
                             style={{ margin: 0 }}
                         >
-                            {post.content }
+                            {content }
                         </p>
                     </div>
                 </div>
             </div>
             <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                 <p className="text-sm/6 primary-text">coś tam</p>
-                {post.createdAt ? (
+                {createdAt ? (
                     <p className="mt-1 text-xs/5 secondary-text">
                         Last seen{' '}
-                        <time dateTime={post.createdAt?.toString()}>
-                            {formatDate(post.createdAt)}
+                        <time dateTime={createdAt?.toString()}>
+                            {formatDate(createdAt)}
                         </time>
                     </p>
                 ) : (

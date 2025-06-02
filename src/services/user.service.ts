@@ -1,22 +1,9 @@
 import { collection, addDoc, Firestore, getDocs, query, where, doc, updateDoc, onSnapshot } from "firebase/firestore";
 import firestore from "./firestore";
-import { UserCredential, UserInfo } from "firebase/auth";
+import { UserCredential } from "firebase/auth";
 import fs from "./firebase";
 import { toast } from "react-toastify";
-
-export interface User {
-    uid: string
-    name: string
-    email?: string
-    displayName?: string
-    provider?: 'google' | 'github' | 'email'
-    settings?: UserSettings,
-    userInfo?: UserInfo
-}
-
-export interface UserSettings {
-    visibleByStrangers?: boolean
-}
+import { User, UserSettings } from "./model/user";
 
 export class _UserService {
 
@@ -136,6 +123,12 @@ export class _UserService {
         return unsubscribe;
     }
 
+
+    public async listUsers(): Promise<User[]> {
+        const usersRef = collection(this.firestore, this.COLLECTION_NAME);
+        const querySnapshot = await getDocs(usersRef);
+        return querySnapshot.docs.map(doc => doc.data() as User);
+    }
 }
 
 const UserService = new _UserService()

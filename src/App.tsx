@@ -14,6 +14,7 @@ import AddPost from './views/AddPost';
 import PostList from './views/PostList';
 import { PostsProvider } from './providers/PostsProvider';
 import Settings from './views/Settings';
+import UsersView from './views/UsersView';
 
 const App: React.FC = () => {
 
@@ -39,6 +40,8 @@ const App: React.FC = () => {
           <Routes>
             
             <Route path={Path.HOME} element={<Home />} />
+
+            <Route path={Path.USERS} element={<UsersView />} />
 
             <Route path={Path.POSTS} element={<PostList />} />
             <Route path={Path.ADD_POST} element={<AddPost />} />

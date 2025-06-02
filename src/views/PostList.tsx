@@ -28,7 +28,9 @@ const PostList: React.FC = () => {
                 {(posts ?? []).map((post, idx) => (
                     <PostListItem
                         key={post.id}
-                        post={post}
+                        avatar={post.avatar}
+                        title={post.title}
+                        content={post.content}
                         expanded={expandedIndex === idx}
                         onExpand={() => setExpandedIndex(expandedIndex === idx ? null : idx)}
                     />
