@@ -51,7 +51,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         unsubscribeUserDoc?.();
         unsubscribeUserDoc = undefined;
       }
-      console.warn("User changed:", u);
+      console.warn("[UserProvider] User changed:", u);
       setLoading(false);
     });
 

@@ -1,4 +1,5 @@
 import { UserInfo } from "firebase/auth"
+import { Avatar } from "../post.service"
 
 export interface User {
     uid: string
@@ -8,6 +9,7 @@ export interface User {
     provider?: 'google' | 'github' | 'email'
     settings?: UserSettings,
     userInfo?: UserInfo
+    avatar?: Avatar
 }
 
 export interface UserSettings {

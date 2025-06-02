@@ -1,9 +1,10 @@
-import { collection, addDoc, Firestore, getDocs, query, where, doc, updateDoc, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, Firestore, getDocs, query, where, doc, updateDoc, onSnapshot, DocumentReference } from "firebase/firestore";
 import firestore from "./firestore";
 import { UserCredential } from "firebase/auth";
 import fs from "./firebase";
 import { toast } from "react-toastify";
 import { User, UserSettings } from "./model/user";
+import { PostUtil } from "../utils/post.util";
 
 export class _UserService {
 
@@ -88,19 +89,24 @@ export class _UserService {
 
     public updateSettings = async (uid: string, settings: UserSettings) => {
         try {
-            const usersRef = collection(this.firestore, this.COLLECTION_NAME);
-            const q = query(usersRef, where("uid", "==", uid));
-            const querySnapshot = await getDocs(q);
-            if (querySnapshot.empty) {
-                throw new Error("User not found");
-            }
-            const docRef = doc(this.firestore, this.COLLECTION_NAME, querySnapshot.docs[0].id);
+            const docRef = await this.getDocumentRef(uid)
             await updateDoc(docRef, { settings });
             toast.success('Ustawienia zostały zapisane.');
         } catch (err: any) {
             toast.error('Błąd zapisu ustawień.');
             console.error('Update settings error:', err);
         }
+    }
+
+    private async getDocumentRef(uid: string): Promise<DocumentReference> {
+        const usersRef = collection(this.firestore, this.COLLECTION_NAME);
+        const q = query(usersRef, where("uid", "==", uid));
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+            throw new Error("User not found");
+        }
+        const docRef = doc(this.firestore, this.COLLECTION_NAME, querySnapshot.docs[0].id);
+        return docRef
     }
 
     /**
@@ -115,12 +121,25 @@ export class _UserService {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             if (querySnapshot.empty) {
                 callback(null);
+                console.log(`User listener... empty`)
             } else {
                 const doc = querySnapshot.docs[0];
-                callback(doc.data() as User);
+                const _user: User = doc.data() as User
+                callback(_user);
+                console.log(`User listener... ${_user}`)
+                this.reinitAvatarIfNeeded(_user)
             }
         });
         return unsubscribe;
+    }
+
+    private async reinitAvatarIfNeeded(user: User) {
+        if (user && !user.avatar) {
+            const avatar = PostUtil.generateAvatar(user.displayName || '', '')
+            const docRef = await this.getDocumentRef(user.uid)
+            await updateDoc(docRef, { avatar })
+            console.warn("Avarar reinitialized")
+        }
     }
 
 

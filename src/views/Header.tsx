@@ -18,6 +18,8 @@ import { Util } from '../utils/util';
 import { Path } from '../utils/path';
 import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
 import { useUserContext } from '../providers/UserProvider';
+import AvatarItem from '../components/AvatarItem';
+import IconButton from '../components/buttons/IconBtn';
 
 interface NavItem {
     to?: string;
@@ -58,7 +60,7 @@ const Header = () => {
 
     return (
         <header className="primary-bg">
-            <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+            <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
                 <div className="flex lg:flex-1">
                     <Link to={Path.HOME} className="-m-1.5 p-1.5">
                         <img
@@ -109,30 +111,24 @@ const Header = () => {
 
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    {(user?.displayName || user?.name || user?.userInfo?.photoURL) ? (
+                    {user ? (
                         <div className="flex items-center gap-2">
                             {/* Avatar */}
-                            {user?.userInfo?.photoURL && (
-                                <img
-                                    src={user.userInfo.photoURL}
-                                    alt={user.displayName || user.name || "avatar"}
-                                    className="h-8 w-8 rounded-full object-cover"
-                                />
-                            )}
+                            <AvatarItem 
+                                photoUrl={user.userInfo?.photoURL || ''}
+                                avatar={user.avatar}
+                                className='small'
+                            ></AvatarItem>
                             {(user?.displayName || user?.name) && (
                                 <span className="text-sm/6 font-semibold primary-text">
                                     {user.displayName || user.name}
                                 </span>
                             )}
-                            <button
-                                onClick={handleLogout}
-                                className="p-2 rounded-full hover:bg-gray-100 text-blue-600 hover:text-blue-800"
-                                title="Logout"
-                            >
+                            <IconButton onClick={handleLogout}>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
                                 </svg>
-                            </button>
+                            </IconButton>
                         </div>
                     ) : (
                         <PrimaryTextBtn to={Path.LOGIN} fullWidth={false}>
@@ -193,32 +189,34 @@ const Header = () => {
                                             <div className="mt-6 flow-root">
                                                 <div className="-my-6 divide-y divide-gray-500/10">
                                                     <div className="py-6">
-                                                                                                                {(user?.displayName || user?.name || user?.userInfo?.photoURL) ? (
-                                                        <div className="flex items-center gap-3 px-3 py-2 mb-4">
-                                                            {user?.userInfo?.photoURL && (
-                                                                <img
-                                                                    src={user.userInfo.photoURL}
-                                                                    alt={user.displayName || user.name || "avatar"}
-                                                                    className="h-8 w-8 rounded-full object-cover"
-                                                                />
-                                                            )}
-                                                            {(user?.displayName || user?.name) && (
-                                                                <span className="text-base font-semibold primary-text">
-                                                                    {user.displayName || user.name}
-                                                                </span>
-                                                            )}
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    handleLogout();
-                                                                    setMobileMenuOpen(false)
-                                                                }}
-                                                                className="pl-10 primary-text bold hover:bg-gray-100 text-blue-600 hover:text-blue-800"
-                                                            >
-                                                                Logout
-                                                            </button>
+                                                        <div className="flex items-center gap-3 px-3 py-2 mb-4 w-100">
+                                                            {user ? (
+                                                                <div className="flex items-center gap-2 justify-between w-100 flex-1">
+
+                                                                    <div className="flex items-center gap-3">
+                                                                        <AvatarItem 
+                                                                            photoUrl={user.userInfo?.photoURL || ''}
+                                                                            avatar={user.avatar}
+                                                                            className='small'
+                                                                        ></AvatarItem>
+                                                                        {(user?.displayName || user?.name) && (
+                                                                            <span className="text-sm/6 font-semibold primary-text">
+                                                                                {user.displayName || user.name}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                    <IconButton onClick={handleLogout}>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
+                                                                        </svg>
+                                                                    </IconButton>
+                                                                </div>
+                                                            ) : (
+                                                                <PrimaryTextBtn to={Path.LOGIN} fullWidth={false}>
+                                                                    Sign in <span aria-hidden="true">&rarr;</span>
+                                                                </PrimaryTextBtn>
+                                                            ) }
                                                         </div>
-                                                    ) : ''}
                                                     {NAV_ITEMS
                                                         .map(item => {
                                                             if (item.to) {

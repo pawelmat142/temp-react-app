@@ -7,8 +7,10 @@ const UsersView: React.FC = () => {
   const { users } = useUserContext();
 
   return (
-    <div className="max-w-2xl mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-4 primary-text">Users</h1>
+    <div className="post-list max-w-2xl mx-auto pb-20 px-5">
+      <h2 className="mt-10 mb-10 text-center text-2xl/9 font-bold tracking-tight primary-text">
+          Users
+      </h2>
       {!users?.length ? (
         <p className="text-gray-600 dark:text-gray-300">No users found</p>
       ) : (
@@ -19,6 +21,8 @@ const UsersView: React.FC = () => {
                 content={user.email || ''}
                 title={user.name}
                 expanded={false}
+                photoUrl={user.userInfo?.photoURL || ''}
+                avatar={user.avatar}
             />
         ))}
         </ul>

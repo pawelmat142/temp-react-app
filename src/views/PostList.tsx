@@ -32,6 +32,7 @@ const PostList: React.FC = () => {
                         title={post.title}
                         content={post.content}
                         expanded={expandedIndex === idx}
+                        createdAt={post.createdAt}
                         onExpand={() => setExpandedIndex(expandedIndex === idx ? null : idx)}
                     />
                 ))}

@@ -18,10 +18,11 @@ interface PostListItemProps {
     content: string
     expanded: boolean;
     createdAt?: Date
+    photoUrl?: string
     onExpand?: () => void;
 }
 
-const PostListItem: React.FC<PostListItemProps> = ({ content, title, avatar, expanded, createdAt, onExpand }) => {
+const PostListItem: React.FC<PostListItemProps> = ({ content, title, avatar, photoUrl, expanded, createdAt, onExpand }) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const [maxHeight, setMaxHeight] = useState('0px');
 
@@ -46,14 +47,29 @@ const PostListItem: React.FC<PostListItemProps> = ({ content, title, avatar, exp
             onClick={onExpand}
         >
             <div className="flex min-w-0 gap-x-4">
-                <div
-                    className="post-list-item-avatar"
-                    style={{
-                        backgroundColor: avatar?.colorHex ? `${avatar.colorHex}` : '#eee',
-                    }}
-                >
-                    {avatar?.letter}
-                </div>
+                {
+                    photoUrl ? (
+                        <img
+                            src={photoUrl}
+                            alt={avatar?.letter || 'avatar'}
+                            className="post-list-item-avatar object-cover"
+                            style={{
+                                borderRadius: '50%',
+                                backgroundColor: avatar?.colorHex ? avatar.colorHex : '#eee',
+                            }}
+                        />
+                    ) : (
+                        <div
+                            className="post-list-item-avatar"
+                            style={{
+                                backgroundColor: avatar?.colorHex ? avatar.colorHex : '#eee',
+                                color: avatar?.letterColorHex
+                            }}
+                        >
+                            {avatar?.letter}
+                        </div>
+                    )
+                }
                 <div className="min-w-0 flex-auto">
                     <p className="text-sm/6 font-semibold primary-text">{title}</p>
                     <div className={`post-list-item-short-content${expanded ? ' hidden' : ''}`}>
