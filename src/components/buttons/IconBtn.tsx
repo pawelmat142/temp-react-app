@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 
 const IconButton: React.FC<BtnInterface> = ({ to='', type = 'button', onClick, children, className, disabled }) => {
-    let myClass = `p-2 rounded-full hover:bg-gray-100 text-blue-600 hover:text-blue-800`;
+    let myClass = `p-2 rounded-full hover:bg-gray-100 primary-color hover:text-blue-800`;
     if (className) {
         myClass += ` ${className}`;
     }

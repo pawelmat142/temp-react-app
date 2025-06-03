@@ -3,6 +3,8 @@ import { useUserContext } from '../providers/UserProvider';
 import UserService from '../services/user.service';
 import SettingItem from '../components/SettingItem';
 import { toast } from 'react-toastify';
+import PrimaryTextBtn from '../components/buttons/PrimaryTextBtn';
+import { Path } from '../utils/path';
 
 const Settings: React.FC = () => {
     const { user, loading } = useUserContext();
@@ -120,6 +122,10 @@ const Settings: React.FC = () => {
                     toggleValue={darkMode}
                     toggleLoading={darkModeSaving}
                 />
+
+                <PrimaryTextBtn to={Path.HOME} className='mt-4'>
+                    Back to Home
+                </PrimaryTextBtn>
             </ul>
         </div>
     );

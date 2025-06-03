@@ -41,6 +41,7 @@ const Header = () => {
         { to: Path.LOGIN, label: "Sign in", authSkip: true, skipHeader: true },
         { to: Path.SETTINGS, label: "Settings", authGuard: true },
         { to: Path.USERS, label: "Users", authGuard: true },
+        { onClick: () => handleLogout(), label: "Logout", authGuard: true, skipHeader: true },
     ]
         .filter(item => !item.authGuard || user)
         .filter(item => !item.authSkip || !user)
@@ -205,17 +206,8 @@ const Header = () => {
                                                                             </span>
                                                                         )}
                                                                     </div>
-                                                                    <IconButton onClick={handleLogout}>
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
-                                                                        </svg>
-                                                                    </IconButton>
                                                                 </div>
-                                                            ) : (
-                                                                <PrimaryTextBtn to={Path.LOGIN} fullWidth={false}>
-                                                                    Sign in <span aria-hidden="true">&rarr;</span>
-                                                                </PrimaryTextBtn>
-                                                            ) }
+                                                            ) : '' }
                                                         </div>
                                                     {NAV_ITEMS
                                                         .map(item => {
@@ -239,7 +231,7 @@ const Header = () => {
                                                                             item.onClick?.();
                                                                             setMobileMenuOpen(false);
                                                                         }}
-                                                                        className="flex justify-between gap-x-6 py-3 cursor-pointer secondary-bg rounded-lg shadow mb-2 px-4 items-center font-semibold primary-text"
+                                                                        className="flex w-full justify-between gap-x-6 py-3 cursor-pointer secondary-bg rounded-lg shadow mb-2 px-4 items-center font-semibold primary-text"
                                                                     >
                                                                         {item.label}
                                                                     </button>
